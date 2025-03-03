@@ -1,0 +1,109 @@
+definitions:
+  main.Product:
+    properties:
+      id:
+        example: 1
+        type: integer
+      name:
+        example: Телефон
+        type: string
+      price:
+        example: 43200
+        type: number
+      stock:
+        example: 15
+        type: integer
+    type: object
+  main.good:
+    properties:
+      id:
+        example: 34
+        type: integer
+      quantity:
+        example: 1
+        type: integer
+    type: object
+  main.status:
+    properties:
+      message:
+        example: Успех
+        type: string
+    type: object
+info:
+  contact: {}
+  description: API для управления товарами
+  title: Go Mux Swagger API
+  version: "1.0"
+paths:
+  /api/products:
+    get:
+      description: Получение списка товаров
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/main.Product'
+            type: array
+      summary: Список товаров
+      tags:
+      - products
+  /api/products/decrease:
+    post:
+      consumes:
+      - application/json
+      description: Уменьшение количества товара на складе
+      parameters:
+      - description: Данные для списания
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/main.good'
+      - description: Игнорировать контроль остатков
+        in: query
+        name: ignore_stock
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Товар списан
+          schema:
+            $ref: '#/definitions/main.status'
+        "400":
+          description: Ошибка в параметрах
+          schema:
+            type: string
+      summary: Списание товара
+      tags:
+      - products
+  /api/products/increase:
+    post:
+      consumes:
+      - application/json
+      description: Увеличение количества товара на складе
+      parameters:
+      - description: Данные для оприходования
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/main.good'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Товар оприходован
+          schema:
+            type: string
+        "400":
+          description: Ошибка в параметрах
+          schema:
+            type: string
+      summary: Оприходование товара
+      tags:
+      - products
+swagger: "2.0"

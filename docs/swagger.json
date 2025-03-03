@@ -1,0 +1,165 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "API для управления товарами",
+        "title": "Go Mux Swagger API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "paths": {
+        "/api/products": {
+            "get": {
+                "description": "Получение списка товаров",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "products"
+                ],
+                "summary": "Список товаров",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/main.Product"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/products/decrease": {
+            "post": {
+                "description": "Уменьшение количества товара на складе",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "products"
+                ],
+                "summary": "Списание товара",
+                "parameters": [
+                    {
+                        "description": "Данные для списания",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/main.good"
+                        }
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Игнорировать контроль остатков",
+                        "name": "ignore_stock",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Товар списан",
+                        "schema": {
+                            "$ref": "#/definitions/main.status"
+                        }
+                    },
+                    "400": {
+                        "description": "Ошибка в параметрах",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/products/increase": {
+            "post": {
+                "description": "Увеличение количества товара на складе",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "products"
+                ],
+                "summary": "Оприходование товара",
+                "parameters": [
+                    {
+                        "description": "Данные для оприходования",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/main.good"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Товар оприходован",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Ошибка в параметрах",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "main.Product": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Телефон"
+                },
+                "price": {
+                    "type": "number",
+                    "example": 43200
+                },
+                "stock": {
+                    "type": "integer",
+                    "example": 15
+                }
+            }
+        },
+        "main.good": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "example": 34
+                },
+                "quantity": {
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "main.status": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Успех"
+                }
+            }
+        }
+    }
+}
